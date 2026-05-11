@@ -1,6 +1,17 @@
 ---
 import '../styles/fonts.css';
 import '../styles/styles.css';
+
+const themes = [
+  { name: 'Ember', bg: '#11100e', surface: '#1a1815', surfaceRaised: '#24211d', textPrimary: '#f1e8dc', textSecondary: '#b3a495', textMuted: '#6f655c', border: '#3a342e' },
+  { name: 'Afternoon', bg: '#fdf6e3', surface: '#eee8d5', surfaceRaised: '#e5dec5', textPrimary: '#657b83', textSecondary: '#93a1a1', textMuted: '#586e75', border: '#d5cbb3' },
+  { name: 'Midnight', bg: '#0d1117', surface: '#161b22', surfaceRaised: '#21262d', textPrimary: '#c9d1d9', textSecondary: '#8b949e', textMuted: '#484f58', border: '#30363d' },
+  { name: 'Dusk', bg: '#1e1b2e', surface: '#252236', surfaceRaised: '#2c2940', textPrimary: '#e2d9f3', textSecondary: '#a39bba', textMuted: '#6f658c', border: '#423c5a' },
+  { name: 'Deep Water', bg: '#0a1628', surface: '#0d1f3c', surfaceRaised: '#12284c', textPrimary: '#a8d8ea', textSecondary: '#729cb3', textMuted: '#4a6f85', border: '#1c3a63' },
+  { name: 'Morning Tide', bg: '#f5f0eb', surface: '#ede8e3', surfaceRaised: '#e3ddd7', textPrimary: '#5c4a3a', textSecondary: '#8c7d6e', textMuted: '#b0a396', border: '#d1c7bd' },
+  { name: 'Prussian Night', bg: '#1a2332', surface: '#1f2b3e', surfaceRaised: '#26344a', textPrimary: '#c8d8e8', textSecondary: '#8ba2b8', textMuted: '#5c738a', border: '#344761' },
+  { name: 'Candlelight', bg: '#fef9e7', surface: '#fdf3d0', surfaceRaised: '#faeab3', textPrimary: '#7d6608', textSecondary: '#ad9125', textMuted: '#c4a635', border: '#e6cf73' }
+];
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -9,14 +20,14 @@ import '../styles/styles.css';
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Oren is a local-first personal knowledge system — editor, diary, games, and more. Private, offline, entirely yours." />
   <title>Oren — Your thoughts deserve a better home.</title>
-  <link rel="icon" type="image/png" href="/oren-logo0.png" />
+  <link rel="icon" type="image/png" href="/oren-logo.png" />
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="/" class="nav-brand">
-    <img src="/oren-logo0.png" alt="Oren logo" class="nav-logo" />
+    <img src="/oren-logo.png" alt="Oren logo" class="nav-logo" />
     <span class="nav-wordmark">Oren</span>
   </a>
   <div class="nav-links" id="nav-links">
@@ -43,7 +54,7 @@ import '../styles/styles.css';
   <p class="hero-sub fade-up" style="transition-delay:0.2s">Oren is a local-first personal knowledge system for writers, students, and thinkers. Everything you need &mdash; editor, diary, games, and more &mdash; private, offline, and entirely yours.</p>
   <div class="hero-ctas fade-up" style="transition-delay:0.3s">
     <a href="#download" class="btn-primary">Download for Windows</a>
-    <a href="#" class="btn-ghost">View on GitHub</a>
+    <a href="https://github.com/VervainLabs/oren.main" class="btn-ghost" target="_blank" rel="noopener noreferrer">View on GitHub</a>
   </div>
   <p class="trust-line fade-up" style="transition-delay:0.4s">Free and open source &nbsp;&middot;&nbsp; No account required &nbsp;&middot;&nbsp; Your data stays on your device</p>
 
@@ -244,71 +255,17 @@ import '../styles/styles.css';
     <h2 class="section-heading fade-up">Sixteen themes. One for every mood.</h2>
     <p class="section-sub fade-up">Light or dark, warm or cool. The terracotta leaf stays home on every one.</p>
     <div class="themes-scroll fade-up">
-
-      <div class="theme-card" style="background:#11100e;">
-        <div class="theme-strip" style="background:#1a1815;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#f1e8dc;">Ember</span>
-        </div>
+      <div class="themes-track">
+        {[...themes, ...themes].map(theme => (
+          <div class="theme-card" data-theme={JSON.stringify(theme)} style={`background:${theme.bg};`}>
+            <div class="theme-strip" style={`background:${theme.surface};`}></div>
+            <div class="theme-body">
+              <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+              <span class="theme-name" style={`color:${theme.textPrimary};`}>{theme.name}</span>
+            </div>
+          </div>
+        ))}
       </div>
-
-      <div class="theme-card" style="background:#fdf6e3;">
-        <div class="theme-strip" style="background:#eee8d5;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#657b83;">Afternoon</span>
-        </div>
-      </div>
-
-      <div class="theme-card" style="background:#0d1117;">
-        <div class="theme-strip" style="background:#161b22;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#c9d1d9;">Midnight</span>
-        </div>
-      </div>
-
-      <div class="theme-card" style="background:#1e1b2e;">
-        <div class="theme-strip" style="background:#252236;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#e2d9f3;">Dusk</span>
-        </div>
-      </div>
-
-      <div class="theme-card" style="background:#0a1628;">
-        <div class="theme-strip" style="background:#0d1f3c;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#a8d8ea;">Deep Water</span>
-        </div>
-      </div>
-
-      <div class="theme-card" style="background:#f5f0eb;">
-        <div class="theme-strip" style="background:#ede8e3;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#5c4a3a;">Morning Tide</span>
-        </div>
-      </div>
-
-      <div class="theme-card" style="background:#1a2332;">
-        <div class="theme-strip" style="background:#1f2b3e;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#c8d8e8;">Prussian Night</span>
-        </div>
-      </div>
-
-      <div class="theme-card" style="background:#fef9e7;">
-        <div class="theme-strip" style="background:#fdf3d0;"></div>
-        <div class="theme-body">
-          <svg class="theme-leaf" viewBox="0 0 16 16" fill="none"><path d="M8 1 C12 1 15 4 14 9 C13 13 10 15 8 15 C6 15 3 13 2 9 C1 4 4 1 8 1 Z M8 1 C7 6 9 10 8 15" stroke="#c96f4f" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
-          <span class="theme-name" style="color:#7d6608;">Candlelight</span>
-        </div>
-      </div>
-
     </div>
     <p class="themes-more fade-up">+ 8 more themes inside the app</p>
   </div>
@@ -360,7 +317,7 @@ import '../styles/styles.css';
     <p class="section-sub fade-up">Download Oren and start building your second brain &mdash; locally, privately, today.</p>
     <div class="hero-ctas fade-up">
       <a href="#" class="btn-primary">Download for Windows (.exe)</a>
-      <a href="#" class="btn-ghost">View on GitHub</a>
+      <a href="https://github.com/VervainLabs/oren.main" class="btn-ghost" target="_blank" rel="noopener noreferrer">View on GitHub</a>
     </div>
     <p class="download-version fade-up">v1.0.0 &nbsp;&middot;&nbsp; Windows 10/11 &nbsp;&middot;&nbsp; ~45 MB</p>
     <p class="download-note fade-up">Linux build coming soon. macOS under consideration.</p>
@@ -373,7 +330,7 @@ import '../styles/styles.css';
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand-logo">
-          <img src="/oren-logo0.png" alt="Oren" class="footer-logo" />
+          <img src="/oren-logo.png" alt="Oren" class="footer-logo" />
           <span class="footer-wordmark">Oren</span>
         </div>
         <p class="footer-tagline">Built by Vervain Labs</p>
@@ -387,12 +344,12 @@ import '../styles/styles.css';
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Vervain Labs</div>
-        <a href="#">About</a>
-        <a href="#">GitHub</a>
+        <a href="https://vervain-labs.vercel.app/" target="_blank" rel="noopener noreferrer">About</a>
+        <a href="https://github.com/VervainLabs/oren.main" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Legal</div>
-        <a href="#">Privacy Policy</a>
+        <a href="/privacy">Privacy Policy</a>
         <a href="#">MIT License</a>
       </div>
     </div>
@@ -428,6 +385,23 @@ import '../styles/styles.css';
   }, { threshold: 0.08 });
 
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // Theme switcher
+  document.querySelectorAll('.theme-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const themeData = card.getAttribute('data-theme');
+      if (themeData) {
+        const theme = JSON.parse(themeData);
+        document.documentElement.style.setProperty('--bg', theme.bg);
+        document.documentElement.style.setProperty('--surface', theme.surface);
+        document.documentElement.style.setProperty('--surface-raised', theme.surfaceRaised);
+        document.documentElement.style.setProperty('--text-primary', theme.textPrimary);
+        document.documentElement.style.setProperty('--text-secondary', theme.textSecondary);
+        document.documentElement.style.setProperty('--text-muted', theme.textMuted);
+        document.documentElement.style.setProperty('--border', theme.border);
+      }
+    });
+  });
 </script>
 
 </body>
