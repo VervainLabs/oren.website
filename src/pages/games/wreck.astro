@@ -1,0 +1,417 @@
+---
+import '../../styles/fonts.css';
+import '../../styles/styles.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Play Wreck, a classic brick breaker game built into Oren." />
+  <title>Wreck — Oren</title>
+  <link rel="icon" type="image/svg+xml" href="/oren-logo.svg" />
+  <style>
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding-bottom: 40px;
+    }
+    .game-header {
+      text-align: center;
+      margin-bottom: 24px;
+      width: 100%;
+      max-width: 480px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .game-title {
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      font-size: 2.5rem;
+      color: var(--text-base);
+      margin: 0;
+      line-height: 1;
+    }
+    .game-stats {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+    .game-score {
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .canvas-wrapper {
+      position: relative;
+      background-color: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+    canvas {
+      display: block;
+      outline: none;
+      touch-action: none;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(var(--surface-1-rgb), 0.9);
+      backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      text-align: center;
+    }
+    .overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .overlay h2 {
+      font-family: 'Newsreader', serif;
+      font-size: 2.5rem;
+      color: var(--text-base);
+      margin-bottom: 8px;
+      font-style: italic;
+    }
+    .overlay p {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+  </style>
+</head>
+<body class="game-page">
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="nav-brand">
+    <img src="/oren-logo.svg" alt="Oren logo" class="nav-logo" />
+    <span class="nav-wordmark">Oren</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="/features" class="nav-link">Features</a>
+    <a href="/#themes" class="nav-link">Themes</a>
+    <a href="/games" class="nav-link">Games</a>
+    <a href="/#download" class="nav-cta">Download</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main class="section" style="padding-top: 100px;">
+  <div class="section-inner section-center">
+    <a href="/games" class="back-link">&larr; Back to Games</a>
+    
+    <div class="game-container fade-up">
+      <div class="game-header">
+        <h1 class="game-title">Wreck</h1>
+        <div class="game-stats">
+          Lives: <span id="lives">3</span><br>
+          Score: <span id="score" class="game-score">0</span>
+        </div>
+      </div>
+      
+      <div class="canvas-wrapper">
+        <canvas id="gameCanvas" width="480" height="500"></canvas>
+        <div class="overlay" id="overlay">
+          <h2 id="overlay-title">Wreck</h2>
+          <p id="overlay-desc">Use mouse or arrows to move the paddle.</p>
+          <button class="btn-primary" id="restart-btn">Start Game</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  // Navbar logic
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+  document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+
+  // Game Logic
+  const canvas = document.getElementById('gameCanvas');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('score');
+  const livesEl = document.getElementById('lives');
+  const overlay = document.getElementById('overlay');
+  const restartBtn = document.getElementById('restart-btn');
+  const overlayTitle = document.getElementById('overlay-title');
+  const overlayDesc = document.getElementById('overlay-desc');
+
+  const style = getComputedStyle(document.body);
+  const getVar = (name, fb) => style.getPropertyValue(name).trim() || fb;
+
+  let score = 0;
+  let lives = 3;
+  let gameActive = false;
+
+  // Ball
+  let ballRadius = 6;
+  let x = canvas.width / 2;
+  let y = canvas.height - 30;
+  let dx = 4;
+  let dy = -4;
+
+  // Paddle
+  let paddleHeight = 10;
+  let paddleWidth = 80;
+  let paddleX = (canvas.width - paddleWidth) / 2;
+  let rightPressed = false;
+  let leftPressed = false;
+
+  // Bricks
+  let brickRowCount = 5;
+  let brickColumnCount = 7;
+  let brickWidth = 56;
+  let brickHeight = 20;
+  let brickPadding = 10;
+  let brickOffsetTop = 50;
+  let brickOffsetLeft = 14;
+  let bricks = [];
+
+  // Particles
+  let particles = [];
+
+  function initBricks() {
+    bricks = [];
+    for(let c = 0; c < brickColumnCount; c++) {
+      bricks[c] = [];
+      for(let r = 0; r < brickRowCount; r++) {
+        // give each row a slightly different shade opacity
+        let opacity = 1 - (r * 0.15);
+        bricks[c][r] = { x: 0, y: 0, status: 1, opacity: opacity };
+      }
+    }
+  }
+
+  function spawnParticles(px, py, color) {
+    for (let i = 0; i < 8; i++) {
+      particles.push({
+        x: px,
+        y: py,
+        vx: (Math.random() - 0.5) * 6,
+        vy: (Math.random() - 0.5) * 6,
+        life: 1,
+        color: color
+      });
+    }
+  }
+
+  document.addEventListener("keydown", e => {
+    if(e.key == "Right" || e.key == "ArrowRight") rightPressed = true;
+    else if(e.key == "Left" || e.key == "ArrowLeft") leftPressed = true;
+  }, false);
+  document.addEventListener("keyup", e => {
+    if(e.key == "Right" || e.key == "ArrowRight") rightPressed = false;
+    else if(e.key == "Left" || e.key == "ArrowLeft") leftPressed = false;
+  }, false);
+  document.addEventListener("mousemove", e => {
+    let relativeX = e.clientX - canvas.getBoundingClientRect().left;
+    if(relativeX > 0 && relativeX < canvas.width) {
+      paddleX = relativeX - paddleWidth/2;
+    }
+  }, false);
+
+  canvas.addEventListener("touchmove", e => {
+    e.preventDefault();
+    let touch = e.touches[0];
+    let relativeX = touch.clientX - canvas.getBoundingClientRect().left;
+    if(relativeX > 0 && relativeX < canvas.width) {
+      paddleX = relativeX - paddleWidth/2;
+    }
+  }, {passive: false});
+
+  function collisionDetection() {
+    for(let c = 0; c < brickColumnCount; c++) {
+      for(let r = 0; r < brickRowCount; r++) {
+        let b = bricks[c][r];
+        if(b.status == 1) {
+          if(x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
+            dy = -dy;
+            b.status = 0;
+            score++;
+            scoreEl.textContent = score;
+            spawnParticles(b.x + brickWidth/2, b.y + brickHeight/2, getVar('--accent', '#f74b0d'));
+            
+            if(score == brickRowCount * brickColumnCount) {
+              overlayTitle.textContent = "You Win!";
+              overlayDesc.textContent = "Great job clearing the wall.";
+              overlay.classList.add('active');
+              gameActive = false;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI*2);
+    ctx.fillStyle = getVar('--accent', '#f74b0d');
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function drawPaddle() {
+    ctx.beginPath();
+    // smooth corners
+    ctx.roundRect ? ctx.roundRect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight, 4) : 
+                    ctx.fillRect(paddleX, canvas.height - paddleHeight - 10, paddleWidth, paddleHeight);
+    ctx.fillStyle = getVar('--text-base', '#fff');
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function drawBricks() {
+    const accentHex = getVar('--accent', '#f74b0d');
+    for(let c = 0; c < brickColumnCount; c++) {
+      for(let r = 0; r < brickRowCount; r++) {
+        if(bricks[c][r].status == 1) {
+          let brickX = (c*(brickWidth+brickPadding)) + brickOffsetLeft;
+          let brickY = (r*(brickHeight+brickPadding)) + brickOffsetTop;
+          bricks[c][r].x = brickX;
+          bricks[c][r].y = brickY;
+          ctx.beginPath();
+          ctx.roundRect ? ctx.roundRect(brickX, brickY, brickWidth, brickHeight, 2) : 
+                          ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
+          
+          // use global alpha for color shades
+          ctx.globalAlpha = bricks[c][r].opacity;
+          ctx.fillStyle = accentHex;
+          ctx.fill();
+          ctx.globalAlpha = 1.0;
+          ctx.closePath();
+        }
+      }
+    }
+  }
+
+  function drawParticles() {
+    for (let i = particles.length - 1; i >= 0; i--) {
+      let p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= 0.05;
+      if (p.life <= 0) {
+        particles.splice(i, 1);
+      } else {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, ballRadius/2, 0, Math.PI*2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.life;
+        ctx.fill();
+        ctx.globalAlpha = 1.0;
+        ctx.closePath();
+      }
+    }
+  }
+
+  function draw() {
+    if (!gameActive) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Bg
+    ctx.fillStyle = getVar('--surface-2', '#1a1a1a');
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    drawParticles();
+    collisionDetection();
+
+    // Wall bounces
+    if(x + dx > canvas.width - ballRadius || x + dx < ballRadius) { dx = -dx; }
+    if(y + dy < ballRadius) { dy = -dy; }
+    else if(y + dy > canvas.height - ballRadius - 10) {
+      if(x > paddleX && x < paddleX + paddleWidth) {
+        // hit paddle, change angle slightly based on hit position
+        let hitPoint = x - (paddleX + paddleWidth/2);
+        dx = hitPoint * 0.15;
+        dy = -dy;
+      }
+      else if(y + dy > canvas.height - ballRadius) {
+        lives--;
+        livesEl.textContent = lives;
+        if(!lives) {
+          overlayTitle.textContent = "Game Over";
+          overlayDesc.textContent = `You scored ${score} points.`;
+          overlay.classList.add('active');
+          gameActive = false;
+        } else {
+          x = canvas.width/2;
+          y = canvas.height-30;
+          dx = 4 * (Math.random() > 0.5 ? 1 : -1);
+          dy = -4;
+          paddleX = (canvas.width-paddleWidth)/2;
+        }
+      }
+    }
+
+    if(rightPressed && paddleX < canvas.width - paddleWidth) { paddleX += 7; }
+    else if(leftPressed && paddleX > 0) { paddleX -= 7; }
+
+    x += dx;
+    y += dy;
+    
+    requestAnimationFrame(draw);
+  }
+
+  function startGame() {
+    initBricks();
+    score = 0;
+    lives = 3;
+    scoreEl.textContent = score;
+    livesEl.textContent = lives;
+    x = canvas.width / 2;
+    y = canvas.height - 30;
+    dx = 4;
+    dy = -4;
+    paddleX = (canvas.width - paddleWidth) / 2;
+    particles = [];
+    overlay.classList.remove('active');
+    gameActive = true;
+    draw();
+  }
+
+  restartBtn.addEventListener('click', startGame);
+
+  // Initial render for bg
+  initBricks();
+  ctx.fillStyle = getVar('--surface-2', '#1a1a1a');
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  drawBricks();
+  drawPaddle();
+  overlay.classList.add('active');
+
+</script>
+
+</body>
+</html>

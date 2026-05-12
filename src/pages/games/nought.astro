@@ -1,0 +1,343 @@
+---
+import '../../styles/fonts.css';
+import '../../styles/styles.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Play Nought, a classic Tic Tac Toe game." />
+  <title>Nought — Oren</title>
+  <link rel="icon" type="image/svg+xml" href="/oren-logo.svg" />
+  <style>
+    .game-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+    .game-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .game-title {
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      font-size: 2.5rem;
+      color: var(--text-base);
+      margin-bottom: 8px;
+    }
+    .game-status {
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      color: var(--text-muted);
+      height: 24px;
+    }
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 8px;
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .cell {
+      background-color: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      cursor: pointer;
+      color: var(--text-base);
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.2s, transform 0.1s;
+    }
+    .cell:hover:not(.taken) {
+      background-color: var(--surface-3);
+    }
+    .cell:active:not(.taken) {
+      transform: scale(0.95);
+    }
+    .cell.taken {
+      cursor: default;
+    }
+    .cell.x-mark {
+      color: var(--accent);
+    }
+    .cell.o-mark {
+      color: var(--text-base);
+    }
+    .win-line {
+      position: absolute;
+      background-color: var(--accent);
+      z-index: 10;
+      border-radius: 4px;
+      transition: width 0.3s ease, height 0.3s ease;
+      display: none;
+    }
+    .win-line.h { height: 4px; width: 0; left: 10px; top: 50%; transform: translateY(-50%); }
+    .win-line.h.active { width: calc(100% - 20px); }
+    
+    .win-line.v { width: 4px; height: 0; top: 10px; left: 50%; transform: translateX(-50%); }
+    .win-line.v.active { height: calc(100% - 20px); }
+    
+    .win-line.d1 { height: 4px; width: 0; left: 10px; top: 10px; transform-origin: top left; transform: rotate(45deg); }
+    .win-line.d1.active { width: calc(141.4% - 28px); }
+    
+    .win-line.d2 { height: 4px; width: 0; right: 10px; top: 10px; transform-origin: top right; transform: rotate(-45deg); }
+    .win-line.d2.active { width: calc(141.4% - 28px); }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      margin-bottom: 24px;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+    .btn-reset {
+      display: none;
+    }
+    .btn-reset.active {
+      display: block;
+    }
+  </style>
+</head>
+<body class="game-page">
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="nav-brand">
+    <img src="/oren-logo.svg" alt="Oren logo" class="nav-logo" />
+    <span class="nav-wordmark">Oren</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="/features" class="nav-link">Features</a>
+    <a href="/#themes" class="nav-link">Themes</a>
+    <a href="/games" class="nav-link">Games</a>
+    <a href="/#download" class="nav-cta">Download</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<main class="section" style="padding-top: 120px;">
+  <div class="section-inner section-center">
+    <a href="/games" class="back-link">&larr; Back to Games</a>
+    
+    <div class="game-container fade-up">
+      <div class="game-header">
+        <h1 class="game-title">Nought</h1>
+        <div class="game-status" id="status">Your turn (X)</div>
+      </div>
+      
+      <div class="board" id="board">
+        <div class="cell" data-index="0"></div>
+        <div class="cell" data-index="1"></div>
+        <div class="cell" data-index="2"></div>
+        <div class="cell" data-index="3"></div>
+        <div class="cell" data-index="4"></div>
+        <div class="cell" data-index="5"></div>
+        <div class="cell" data-index="6"></div>
+        <div class="cell" data-index="7"></div>
+        <div class="cell" data-index="8"></div>
+        <div class="win-line" id="win-line"></div>
+      </div>
+
+      <button class="btn-ghost btn-reset" id="reset-btn">Play Again</button>
+    </div>
+  </div>
+</main>
+
+<script>
+  // Navbar fade-up logic
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+  document.querySelectorAll('.fade-up').forEach(el => el.classList.add('visible'));
+
+  // Tic Tac Toe Logic
+  const cells = document.querySelectorAll('.cell');
+  const statusEl = document.getElementById('status');
+  const resetBtn = document.getElementById('reset-btn');
+  const winLine = document.getElementById('win-line');
+  
+  let board = Array(9).fill(null);
+  let gameActive = true;
+  const HUMAN = 'X';
+  const AI = 'O';
+
+  const winPatterns = [
+    [0,1,2, 'h', 0], [3,4,5, 'h', 1], [6,7,8, 'h', 2], // Rows
+    [0,3,6, 'v', 0], [1,4,7, 'v', 1], [2,5,8, 'v', 2], // Cols
+    [0,4,8, 'd1', 0], [2,4,6, 'd2', 0] // Diagonals
+  ];
+
+  function checkWin(currentBoard, player) {
+    for (let i = 0; i < winPatterns.length; i++) {
+      const [a, b, c] = winPatterns[i];
+      if (currentBoard[a] === player && currentBoard[b] === player && currentBoard[c] === player) {
+        return { won: true, pattern: winPatterns[i] };
+      }
+    }
+    return { won: false };
+  }
+
+  function getEmptyCells(currentBoard) {
+    return currentBoard.map((val, idx) => val === null ? idx : null).filter(val => val !== null);
+  }
+
+  function checkDraw(currentBoard) {
+    return getEmptyCells(currentBoard).length === 0;
+  }
+
+  function evaluateBoard(currentBoard) {
+    if (checkWin(currentBoard, AI).won) return 10;
+    if (checkWin(currentBoard, HUMAN).won) return -10;
+    return 0;
+  }
+
+  function minimax(currentBoard, depth, isMaximizing) {
+    const score = evaluateBoard(currentBoard);
+    if (score === 10) return score - depth;
+    if (score === -10) return score + depth;
+    if (checkDraw(currentBoard)) return 0;
+
+    const empties = getEmptyCells(currentBoard);
+    
+    if (isMaximizing) {
+      let best = -Infinity;
+      for (let idx of empties) {
+        currentBoard[idx] = AI;
+        best = Math.max(best, minimax(currentBoard, depth + 1, !isMaximizing));
+        currentBoard[idx] = null;
+      }
+      return best;
+    } else {
+      let best = Infinity;
+      for (let idx of empties) {
+        currentBoard[idx] = HUMAN;
+        best = Math.min(best, minimax(currentBoard, depth + 1, !isMaximizing));
+        currentBoard[idx] = null;
+      }
+      return best;
+    }
+  }
+
+  function getBestMove() {
+    let bestVal = -Infinity;
+    let bestMove = -1;
+    const empties = getEmptyCells(board);
+    
+    for (let idx of empties) {
+      board[idx] = AI;
+      let moveVal = minimax(board, 0, false);
+      board[idx] = null;
+      if (moveVal > bestVal) {
+        bestMove = idx;
+        bestVal = moveVal;
+      }
+    }
+    return bestMove;
+  }
+
+  function drawWinLine(pattern) {
+    const [a, b, c, type, offset] = pattern;
+    winLine.className = `win-line ${type}`;
+    winLine.style.display = 'block';
+    
+    if (type === 'h') {
+      winLine.style.top = `calc(${offset * 108 + 50}px)`; // 100px cell + 8px gap
+      winLine.style.left = '10px';
+    } else if (type === 'v') {
+      winLine.style.left = `calc(${offset * 108 + 50}px)`;
+      winLine.style.top = '10px';
+    } else if (type === 'd1') {
+      // top-left to bottom-right handled by css class mostly
+    } else if (type === 'd2') {
+      // top-right to bottom-left handled by css class
+    }
+    
+    // trigger animation
+    setTimeout(() => winLine.classList.add('active'), 50);
+  }
+
+  function handleEnd(result, player) {
+    gameActive = false;
+    if (result.won) {
+      statusEl.textContent = player === HUMAN ? 'You won!' : 'Oren won.';
+      drawWinLine(result.pattern);
+    } else {
+      statusEl.textContent = 'It\'s a draw.';
+    }
+    resetBtn.classList.add('active');
+  }
+
+  function aiMove() {
+    if (!gameActive) return;
+    statusEl.textContent = 'Oren is thinking...';
+    
+    setTimeout(() => {
+      const move = getBestMove();
+      if (move !== -1) {
+        board[move] = AI;
+        cells[move].textContent = AI;
+        cells[move].classList.add('taken', 'o-mark');
+        
+        const win = checkWin(board, AI);
+        if (win.won) {
+          handleEnd(win, AI);
+        } else if (checkDraw(board)) {
+          handleEnd({won: false}, null);
+        } else {
+          statusEl.textContent = 'Your turn (X)';
+        }
+      }
+    }, 500); // Artificial delay for effect
+  }
+
+  cells.forEach(cell => {
+    cell.addEventListener('click', () => {
+      const idx = cell.dataset.index;
+      if (!gameActive || board[idx] !== null) return;
+      
+      board[idx] = HUMAN;
+      cell.textContent = HUMAN;
+      cell.classList.add('taken', 'x-mark');
+      
+      const win = checkWin(board, HUMAN);
+      if (win.won) {
+        handleEnd(win, HUMAN);
+      } else if (checkDraw(board)) {
+        handleEnd({won: false}, null);
+      } else {
+        aiMove();
+      }
+    });
+  });
+
+  resetBtn.addEventListener('click', () => {
+    board = Array(9).fill(null);
+    gameActive = true;
+    cells.forEach(cell => {
+      cell.textContent = '';
+      cell.className = 'cell';
+    });
+    winLine.className = 'win-line';
+    winLine.style.display = 'none';
+    resetBtn.classList.remove('active');
+    statusEl.textContent = 'Your turn (X)';
+  });
+
+</script>
+
+</body>
+</html>
