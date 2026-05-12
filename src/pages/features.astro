@@ -1,0 +1,417 @@
+---
+import '../styles/fonts.css';
+import '../styles/styles.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Test out Oren's features including the encrypted diary and built-in typing test." />
+  <title>Features Demo — Oren</title>
+  <link rel="icon" type="image/svg+xml" href="/oren-logo.svg" />
+</head>
+<body class="features-page">
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="nav-brand">
+    <img src="/oren-logo.svg" alt="Oren logo" class="nav-logo" />
+    <span class="nav-wordmark">Oren</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="/features" class="nav-link">Features</a>
+    <a href="/#themes" class="nav-link">Themes</a>
+    <a href="/games" class="nav-link">Games</a>
+    <a href="/#download" class="nav-cta">Download</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/features" class="nav-link">Features</a>
+  <a href="/#themes" class="nav-link">Themes</a>
+  <a href="/games" class="nav-link">Games</a>
+  <a href="/#download" class="nav-cta">Download</a>
+</div>
+
+<!-- HEADER -->
+<header class="section-center" style="padding-top: 140px; padding-bottom: 60px;">
+  <span class="section-label fade-up">Interactive Demos</span>
+  <h1 class="section-heading fade-up" style="font-size: var(--text-hero); line-height: 1.1; margin-bottom: 24px;">Experience Oren.</h1>
+  <p class="section-sub fade-up" style="margin-bottom: 0;">Try the typing test and see how the encrypted diary works, right in your browser.</p>
+</header>
+
+<main class="section" style="min-height: 60vh; padding-bottom: 80px;">
+  <div class="section-inner feature-blocks">
+
+    <!-- Block 1: Typing Test -->
+    <div class="feature-block fade-up">
+      <div class="panel interactive-panel">
+        <div class="panel-bar"><div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div></div>
+        <div class="type-body demo-type-body">
+          <div class="demo-type-header">
+            <div class="type-timer" id="demo-timer">30</div>
+            <div class="demo-type-stats" id="demo-stats" style="display:none;">
+              <span id="demo-wpm">0 WPM</span>
+              <span id="demo-acc">100% acc</span>
+            </div>
+          </div>
+          <div class="type-words" id="demo-words">
+            <!-- Words injected by JS -->
+          </div>
+          <div class="demo-type-overlay" id="demo-overlay">
+            <h3>Test Complete</h3>
+            <p>Full test inside the app.</p>
+            <button class="btn-primary" id="demo-restart">Try Again</button>
+          </div>
+        </div>
+      </div>
+      <div class="feature-text">
+        <h3 class="feature-text-heading">Mini Typing Test</h3>
+        <p class="feature-text-body">Oren includes a full MonkeyType-style typing test. Practice your speed and accuracy without ever leaving your notes. Try this 30-second live demo by clicking on the text and typing.</p>
+      </div>
+    </div>
+
+    <!-- Block 2: Encrypted Diary -->
+    <div class="feature-block reverse fade-up">
+      <div class="panel interactive-panel diary-demo-panel">
+        <div class="panel-bar"><div class="panel-dot"></div><div class="panel-dot"></div><div class="panel-dot"></div></div>
+        
+        <!-- Locked State -->
+        <div class="diary-locked-state" id="diary-locked">
+          <svg class="lock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <div class="pin-dots">
+            <div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div><div class="pin-dot"></div>
+          </div>
+          <div class="pin-pad">
+            <button class="pin-btn">1</button><button class="pin-btn">2</button><button class="pin-btn">3</button>
+            <button class="pin-btn">4</button><button class="pin-btn">5</button><button class="pin-btn">6</button>
+            <button class="pin-btn">7</button><button class="pin-btn">8</button><button class="pin-btn">9</button>
+            <button class="pin-btn empty"></button><button class="pin-btn">0</button><button class="pin-btn action" id="pin-clear">C</button>
+          </div>
+        </div>
+
+        <!-- Unlocked State -->
+        <div class="diary-unlocked-state" id="diary-unlocked">
+          <div class="diary-body">
+            <div class="diary-dates">
+              <div class="diary-date active">May 11</div>
+              <div class="diary-date">May 10</div>
+              <div class="diary-date">May 9</div>
+              <div class="diary-date">May 8</div>
+            </div>
+            <div class="diary-editor">
+              <div class="mood-row">
+                <div class="mood-btn" style="border-color: var(--accent); color: var(--accent)">★</div><div class="mood-btn">●</div><div class="mood-btn">▲</div><div class="mood-btn">■</div><div class="mood-btn">◆</div>
+              </div>
+              <p class="diary-text">The encryption works flawlessly. Every keystroke is secured, making this space entirely mine. It feels good to have a digital space that isn't mining my thoughts for advertising data.</p>
+              <div class="diary-tags">
+                <span class="diary-tag">privacy</span><span class="diary-tag">security</span>
+              </div>
+              <button class="btn-ghost" id="diary-lock-btn" style="margin-top:auto; height: 32px; font-size: 12px; border-color: var(--border);">Lock Diary</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="feature-text">
+        <h3 class="feature-text-heading">Encrypted Diary</h3>
+        <p class="feature-text-body">Your diary entries are AES-128 encrypted on your disk. Not even Oren can read them without your PIN. Enter a 4-digit PIN in the demo to see the visceral reveal animation that sells the security angle.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <img src="/oren-logo.svg" alt="Oren" class="footer-logo" />
+          <span class="footer-wordmark">Oren</span>
+        </div>
+        <p class="footer-tagline">Built by Vervain Labs</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="/features">Features</a>
+        <a href="/#themes">Themes</a>
+        <a href="/#download">Download</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Vervain Labs</div>
+        <a href="https://vervain-labs.vercel.app/" target="_blank" rel="noopener noreferrer">About</a>
+        <a href="https://github.com/VervainLabs/oren.main" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="#">MIT License</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Vervain Labs &nbsp;&middot;&nbsp; Oren is free and open source</div>
+  </div>
+</footer>
+
+<script>
+  // Navbar & fade-up
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => navbar.classList.toggle('scrolled', window.scrollY > 20), { passive: true });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // --- TYPING TEST DEMO LOGIC ---
+  const wordsContainer = document.getElementById('demo-words');
+  const timerEl = document.getElementById('demo-timer');
+  const statsEl = document.getElementById('demo-stats');
+  const wpmEl = document.getElementById('demo-wpm');
+  const accEl = document.getElementById('demo-acc');
+  const overlayEl = document.getElementById('demo-overlay');
+  const restartBtn = document.getElementById('demo-restart');
+
+  const textToType = "the quick brown fox jumps over the lazy dog and then returns to sleep beneath the autumn oak tree quietly writing a new chapter about a local first future where thoughts are kept private".split(' ');
+  
+  let currentWordIdx = 0;
+  let currentLetterIdx = 0;
+  let timer = 30;
+  let interval = null;
+  let testStarted = false;
+  let correctKeystrokes = 0;
+  let totalKeystrokes = 0;
+
+  function initTypingTest() {
+    wordsContainer.innerHTML = '';
+    textToType.forEach((word, wIdx) => {
+      const wordEl = document.createElement('div');
+      wordEl.className = 'type-word-wrap';
+      [...word].forEach((char, cIdx) => {
+        const charEl = document.createElement('span');
+        charEl.className = 'type-char';
+        charEl.textContent = char;
+        wordEl.appendChild(charEl);
+      });
+      wordsContainer.appendChild(wordEl);
+    });
+    currentWordIdx = 0;
+    currentLetterIdx = 0;
+    timer = 30;
+    correctKeystrokes = 0;
+    totalKeystrokes = 0;
+    testStarted = false;
+    timerEl.textContent = timer;
+    statsEl.style.display = 'none';
+    timerEl.style.display = 'block';
+    overlayEl.classList.remove('active');
+    updateCursor();
+  }
+
+  function updateCursor() {
+    document.querySelectorAll('.type-char').forEach(el => el.classList.remove('cursor'));
+    const wordEls = wordsContainer.children;
+    if (wordEls[currentWordIdx]) {
+      const charEls = wordEls[currentWordIdx].children;
+      if (charEls[currentLetterIdx]) {
+        charEls[currentLetterIdx].classList.add('cursor');
+      } else {
+        // Cursor at end of word (waiting for space)
+        const spaceCursor = document.createElement('span');
+        spaceCursor.className = 'type-char cursor space-cursor';
+        spaceCursor.innerHTML = '&nbsp;';
+        wordEls[currentWordIdx].appendChild(spaceCursor);
+      }
+    }
+  }
+
+  function endTest() {
+    clearInterval(interval);
+    window.removeEventListener('keydown', handleKeydown);
+    const minutes = (30 - timer) / 60 || 0.5;
+    const wpm = Math.round((correctKeystrokes / 5) / minutes);
+    const acc = totalKeystrokes > 0 ? Math.round((correctKeystrokes / totalKeystrokes) * 100) : 0;
+    
+    timerEl.style.display = 'none';
+    statsEl.style.display = 'flex';
+    wpmEl.textContent = wpm + ' WPM';
+    accEl.textContent = acc + '% acc';
+    overlayEl.classList.add('active');
+  }
+
+  function handleKeydown(e) {
+    // Only handle Backspace, Space, and letters A-Z
+    if (e.key === 'Backspace') {
+      if (currentLetterIdx > 0) {
+        currentLetterIdx--;
+        const wordEls = wordsContainer.children;
+        const charEls = wordEls[currentWordIdx].children;
+        charEls[currentLetterIdx].classList.remove('correct', 'wrong');
+        // Remove extra chars if they were added
+        if (charEls[currentLetterIdx].classList.contains('extra')) {
+          charEls[currentLetterIdx].remove();
+        }
+      } else if (currentWordIdx > 0) {
+        currentWordIdx--;
+        const wordEls = wordsContainer.children;
+        currentLetterIdx = wordEls[currentWordIdx].querySelectorAll('.type-char:not(.space-cursor)').length;
+      }
+      updateCursor();
+      return;
+    }
+
+    if (e.key === ' ') e.preventDefault(); // Prevent scrolling
+
+    // Ignore modifier keys and special keys like Delete, Enter, Tab
+    if (e.key.length !== 1) return;
+
+    const typedChar = e.key.toLowerCase();
+    if (typedChar !== ' ' && !/^[a-z]$/.test(typedChar)) return;
+
+    if (!testStarted) {
+      testStarted = true;
+      interval = setInterval(() => {
+        timer--;
+        timerEl.textContent = timer;
+        if (timer <= 0) endTest();
+      }, 1000);
+    }
+
+    const wordEls = wordsContainer.children;
+    const currentWordEl = wordEls[currentWordIdx];
+    if (!currentWordEl) return;
+    
+    // Remove space cursor if it exists
+    const spaceCursor = currentWordEl.querySelector('.space-cursor');
+    if (spaceCursor) spaceCursor.remove();
+
+    const charEls = currentWordEl.querySelectorAll('.type-char:not(.space-cursor)');
+    const targetWord = textToType[currentWordIdx];
+
+    totalKeystrokes++;
+
+    if (e.key === ' ') {
+      if (currentLetterIdx === targetWord.length) {
+        currentWordIdx++;
+        currentLetterIdx = 0;
+        correctKeystrokes++; // space counts as correct keystroke
+      }
+    } else {
+      const typedChar = e.key.toLowerCase();
+      if (currentLetterIdx < targetWord.length) {
+        const charEl = charEls[currentLetterIdx];
+        if (typedChar === targetWord[currentLetterIdx]) {
+          charEl.classList.add('correct');
+          correctKeystrokes++;
+        } else {
+          charEl.classList.add('wrong');
+        }
+        currentLetterIdx++;
+      } else {
+        // typing extra chars
+        const extraChar = document.createElement('span');
+        extraChar.className = 'type-char wrong extra';
+        extraChar.textContent = typedChar;
+        currentWordEl.appendChild(extraChar);
+        currentLetterIdx++;
+      }
+    }
+
+    if (currentWordIdx >= textToType.length) {
+      endTest();
+    } else {
+      updateCursor();
+    }
+  }
+
+  // Allow clicking the panel to focus
+  wordsContainer.parentElement.addEventListener('click', () => {
+    window.addEventListener('keydown', handleKeydown);
+    wordsContainer.parentElement.style.outline = '1px solid var(--accent)';
+  });
+  
+  // Unfocus when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!wordsContainer.parentElement.contains(e.target)) {
+      window.removeEventListener('keydown', handleKeydown);
+      wordsContainer.parentElement.style.outline = 'none';
+    }
+  });
+
+  restartBtn.addEventListener('click', () => {
+    initTypingTest();
+    window.addEventListener('keydown', handleKeydown);
+    wordsContainer.parentElement.style.outline = '1px solid var(--accent)';
+  });
+
+  initTypingTest();
+
+  // --- DIARY DEMO LOGIC ---
+  const lockedState = document.getElementById('diary-locked');
+  const unlockedState = document.getElementById('diary-unlocked');
+  const pinBtns = document.querySelectorAll('.pin-btn:not(.empty)');
+  const pinDots = document.querySelectorAll('.pin-dot');
+  const clearBtn = document.getElementById('pin-clear');
+  const lockBtn = document.getElementById('diary-lock-btn');
+  let currentPin = '';
+
+  function updateDots() {
+    pinDots.forEach((dot, idx) => {
+      if (idx < currentPin.length) {
+        dot.classList.add('filled');
+      } else {
+        dot.classList.remove('filled');
+      }
+    });
+
+    if (currentPin.length === 4) {
+      // Simulate success
+      pinDots.forEach(dot => dot.classList.add('success'));
+      setTimeout(() => {
+        lockedState.classList.add('unlocking');
+        setTimeout(() => {
+          lockedState.style.display = 'none';
+          unlockedState.style.display = 'block';
+          // Trigger reflow
+          void unlockedState.offsetWidth;
+          unlockedState.classList.add('visible');
+        }, 300);
+      }, 400);
+    }
+  }
+
+  pinBtns.forEach(btn => {
+    if (btn.id === 'pin-clear') return;
+    btn.addEventListener('click', () => {
+      if (currentPin.length < 4) {
+        currentPin += btn.textContent;
+        updateDots();
+      }
+    });
+  });
+
+  clearBtn.addEventListener('click', () => {
+    currentPin = '';
+    pinDots.forEach(dot => dot.classList.remove('success', 'filled'));
+    updateDots();
+  });
+
+  lockBtn.addEventListener('click', () => {
+    currentPin = '';
+    pinDots.forEach(dot => dot.classList.remove('success', 'filled'));
+    lockedState.classList.remove('unlocking');
+    unlockedState.classList.remove('visible');
+    unlockedState.style.display = 'none';
+    lockedState.style.display = 'flex';
+  });
+
+</script>
+
+</body>
+</html>

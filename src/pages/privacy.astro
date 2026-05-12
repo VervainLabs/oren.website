@@ -1,0 +1,191 @@
+---
+import '../styles/fonts.css';
+import '../styles/styles.css';
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Privacy Policy for Oren — a local-first desktop app by Vervain Labs. Oren collects no data. Everything stays on your device." />
+  <title>Privacy Policy — Oren</title>
+  <link rel="icon" type="image/svg+xml" href="/oren-logo.svg" />
+</head>
+<body class="policy-page">
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <a href="/" class="nav-brand">
+    <img src="/oren-logo.svg" alt="Oren logo" class="nav-logo" />
+    <span class="nav-wordmark">Oren</span>
+  </a>
+  <div class="nav-links" id="nav-links">
+    <a href="/features" class="nav-link">Features</a>
+    <a href="/#themes" class="nav-link">Themes</a>
+    <a href="/games" class="nav-link">Games</a>
+    <a href="/#download" class="nav-cta">Download</a>
+  </div>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="/features" class="nav-link">Features</a>
+  <a href="/#themes" class="nav-link">Themes</a>
+  <a href="/games" class="nav-link">Games</a>
+  <a href="/#download" class="nav-cta">Download</a>
+</div>
+
+<!-- PRIVACY POLICY -->
+<main class="policy">
+
+  <!-- Hero -->
+  <header class="policy-hero">
+    <h1 class="policy-hero-quote fade-up">&ldquo;Your notes never leave your device.&rdquo;</h1>
+    <p class="policy-hero-meta fade-up" style="transition-delay:0.1s">Privacy Policy &mdash; Oren v1.0.0 &middot; Effective 2026</p>
+  </header>
+
+  <!-- Summary (Section 10, moved to top) -->
+  <section class="policy-summary fade-up" style="transition-delay:0.15s">
+    <p>Your notes are yours. They live on your machine. We cannot read them, we do not want to read them, and we have built Oren in a way that makes it technically impossible for us to do so even if we wanted to. That is the point.</p>
+  </section>
+
+  <!-- Short version -->
+  <section class="policy-intro fade-up">
+    <p>Oren does not collect your data. It cannot. It has no internet connection, no servers, and no way to send anything anywhere. Everything you write stays on your computer.</p>
+  </section>
+
+  <!-- 1. What Oren is -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">1. What Oren is</h2>
+    <p>Oren is a local-first desktop application for Windows. It runs entirely on your machine. It does not require an account, an internet connection, or any form of registration to use.</p>
+  </section>
+
+  <!-- 2. Data we collect -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">2. Data we collect</h2>
+    <p class="policy-none">None.</p>
+    <p>Oren does not collect, transmit, store remotely, or share any personal data, usage data, crash reports, analytics, or telemetry of any kind. There are no servers. There is no database. There is no company infrastructure that your data ever touches.</p>
+  </section>
+
+  <!-- 3. Data Oren stores on your device -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">3. Data Oren stores on your device</h2>
+    <p>Everything Oren saves lives in one folder on your computer:</p>
+    <span class="policy-path">~/Documents/Oren/</span>
+    <p>This includes your notes, diary entries, snippets, drawings, themes preferences, typing test records, and streak data. None of this ever leaves your device through Oren.</p>
+    <p>Your diary entries are encrypted using AES-128 encryption. The encryption key is derived from your PIN and never stored or transmitted. If you lose your PIN, Vervain Labs cannot recover your entries &mdash; we have no access to them.</p>
+  </section>
+
+  <!-- 4. What the installer writes -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">4. What the installer writes</h2>
+    <p>The Oren installer (<span class="policy-path-inline">Oren-Setup.exe</span>) writes two things to the Windows Registry:</p>
+    <ul class="policy-list">
+      <li>An uninstaller entry so Oren appears in Windows Apps and Features</li>
+      <li>An optional file association for <span class="policy-path-inline">.md</span> files, only if you chose this during installation</li>
+    </ul>
+    <p>These are standard Windows installer entries. They contain no personal information &mdash; only the install path and version number.</p>
+    <p>Nothing is written to AppData, Temp, or any other system directory beyond what is listed above.</p>
+  </section>
+
+  <!-- 5. Network activity -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">5. Network activity</h2>
+    <p>Oren makes zero network requests. It does not check for updates, phone home, load remote fonts, fetch quotes from an API, or communicate with any server at any point during its operation. You can run Oren permanently in airplane mode and it will work identically.</p>
+  </section>
+
+  <!-- 6. Third-party services -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">6. Third-party services</h2>
+    <p>Oren itself uses none.</p>
+    <p>However, Oren is distributed through GitHub. When you visit the Oren repository at <a href="https://github.com/VervainLabs/oren.main" class="policy-link" target="_blank" rel="noopener noreferrer">github.com/VervainLabs/oren</a>, GitHub may collect data about your visit &mdash; including your IP address and browser information &mdash; as part of their own platform. This is governed by GitHub&rsquo;s Privacy Policy and is outside our control. Vervain Labs does not have access to this data and does not use it.</p>
+  </section>
+
+  <!-- 7. Children's privacy -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">7. Children&rsquo;s privacy</h2>
+    <p>Oren does not collect data from anyone, including children under the age of 13. Because no data is collected at all, COPPA and similar regulations are straightforwardly satisfied.</p>
+  </section>
+
+  <!-- 8. Changes to this policy -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">8. Changes to this policy</h2>
+    <p>If this policy changes in a future version of Oren &mdash; for example if an optional cloud sync feature is ever introduced &mdash; the updated policy will be published on this page with a new effective date and noted in the release changelog. We will never introduce data collection silently.</p>
+  </section>
+
+  <!-- 9. Contact -->
+  <section class="policy-section fade-up">
+    <h2 class="policy-heading">9. Contact</h2>
+    <p>If you have any questions about this policy or about how Oren handles your data, contact us at:</p>
+    <a href="mailto:Vervain0@proton.me" class="policy-email">Vervain0@proton.me</a>
+    <p>We will respond as soon as possible.</p>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-brand-logo">
+          <img src="/oren-logo.svg" alt="Oren" class="footer-logo" />
+          <span class="footer-wordmark">Oren</span>
+        </div>
+        <p class="footer-tagline">Built by Vervain Labs</p>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Product</div>
+        <a href="/features">Features</a>
+        <a href="/#themes">Themes</a>
+        <a href="/#download">Download</a>
+        <a href="#">Changelog</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Vervain Labs</div>
+        <a href="https://vervain-labs.vercel.app/" target="_blank" rel="noopener noreferrer">About</a>
+        <a href="https://github.com/VervainLabs/oren.main" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Legal</div>
+        <a href="/privacy">Privacy Policy</a>
+        <a href="#">MIT License</a>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; 2026 Vervain Labs &nbsp;&middot;&nbsp; Oren is free and open source</div>
+  </div>
+</footer>
+
+<script>
+  // Navbar scroll class
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 20);
+  }, { passive: true });
+
+  // Hamburger menu
+  const hamburger = document.getElementById('hamburger');
+  const mobileMenu = document.getElementById('mobile-menu');
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // Intersection observer for fade-up
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
