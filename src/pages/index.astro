@@ -20,20 +20,20 @@ const themes = [
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Oren is a local-first personal knowledge system — editor, diary, games, and more. Private, offline, entirely yours." />
   <title>Oren — Your thoughts deserve a better home.</title>
-  <link rel="icon" type="image/png" href="/oren-logo.png" />
+  <link rel="icon" type="image/svg+xml" href="/oren-logo.svg" />
 </head>
 <body>
 
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <a href="/" class="nav-brand">
-    <img src="/oren-logo.png" alt="Oren logo" class="nav-logo" />
+    <img src="/oren-logo.svg" alt="Oren logo" class="nav-logo" />
     <span class="nav-wordmark">Oren</span>
   </a>
   <div class="nav-links" id="nav-links">
-    <a href="#features" class="nav-link">Features</a>
+    <a href="/features" class="nav-link">Features</a>
     <a href="#themes" class="nav-link">Themes</a>
-    <a href="#games" class="nav-link">Games</a>
+    <a href="/games" class="nav-link">Games</a>
     <a href="#download" class="nav-cta">Download</a>
   </div>
   <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -41,9 +41,9 @@ const themes = [
   </button>
 </nav>
 <div class="mobile-menu" id="mobile-menu">
-  <a href="#features" class="nav-link">Features</a>
+  <a href="/features" class="nav-link">Features</a>
   <a href="#themes" class="nav-link">Themes</a>
-  <a href="#games" class="nav-link">Games</a>
+  <a href="/games" class="nav-link">Games</a>
   <a href="#download" class="nav-cta">Download</a>
 </div>
 
@@ -245,6 +245,9 @@ const themes = [
       </div>
 
     </div>
+    <div class="hero-ctas fade-up" style="margin-top: 60px; text-align: center;">
+      <a href="/features" class="btn-ghost">Try Interactive Demos</a>
+    </div>
   </div>
 </section>
 
@@ -288,6 +291,9 @@ const themes = [
       <div class="game-card fade-up" style="--i:7"><span class="game-badge">Word</span><div class="game-name">Gallows</div><p class="game-desc">A word is hidden. Guess wrong and the scaffold grows.</p></div>
       <div class="game-card fade-up" style="--i:8"><span class="game-badge">Word &middot; Daily</span><div class="game-name">Hive</div><p class="game-desc">Seven letters. Every word needs the centre. Find the one that uses all seven.</p></div>
     </div>
+    <div class="hero-ctas fade-up" style="margin-top: 48px;">
+      <a href="/games" class="btn-ghost">Play Mini Games</a>
+    </div>
   </div>
 </section>
 
@@ -330,16 +336,16 @@ const themes = [
     <div class="footer-top">
       <div class="footer-brand">
         <div class="footer-brand-logo">
-          <img src="/oren-logo.png" alt="Oren" class="footer-logo" />
+          <img src="/oren-logo.svg" alt="Oren" class="footer-logo" />
           <span class="footer-wordmark">Oren</span>
         </div>
         <p class="footer-tagline">Built by Vervain Labs</p>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Product</div>
-        <a href="#features">Features</a>
-        <a href="#themes">Themes</a>
-        <a href="#download">Download</a>
+        <a href="/features">Features</a>
+        <a href="/#themes">Themes</a>
+        <a href="/#download">Download</a>
         <a href="#">Changelog</a>
       </div>
       <div class="footer-col">
